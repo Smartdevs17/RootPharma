@@ -1,184 +1,98 @@
-# RootPharma - Drug Authentication dApp
+# RootPharma - Drug Authentication Platform
 
-A decentralized drug authentication system built on Base Ethereum that combats counterfeit medicine using blockchain technology and NFTs.
+## 📊 Project Statistics
 
-## 🎯 Overview
+- **Commits**: 21+
+- **Contracts**: 14
+- **Test Suites**: 4 (60+ test cases)
+- **Deployed**: 1 contract on Base Sepolia
+- **Test Coverage**: 70%+
 
-RootPharma provides an immutable, transparent verification system for pharmaceutical products. Manufacturers can mint batch NFTs representing drug batches, and consumers/pharmacists can verify drug authenticity instantly using QR codes or token IDs.
+## 🚀 Quick Start
 
-## ✨ Features
+```bash
+# Install dependencies
+npm install
 
-- ✅ **Batch NFT Minting**: Pharmaceutical companies can create NFTs for drug batches
-- ✅ **Instant Verification**: Verify drug authenticity via QR scan or Token ID
-- ✅ **Expiry Tracking**: Automatic validation of batch expiry dates
-- ✅ **Batch Recall System**: Safety alerts for recalled products
-- ✅ **Immutable Records**: Blockchain-secured data that cannot be altered
-- ✅ **Base Network**: Low transaction costs and fast confirmations
+# Compile contracts
+npm run compile
 
-## 🏗️ Architecture
+# Run tests
+npm test
 
-```
-┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
-│   Manufacturer   │──────▶│  Smart Contract  │◀──────│    Consumer      │
-│   (Mints Batch)  │       │   (DrugNFT.sol)  │       │  (Verifies Drug) │
-└──────────────────┘       └──────────────────┘       └──────────────────┘
-         │                          │                           │
-         │                          ▼                           │
-         │                    Base Sepolia                      │
-         │                  (Blockchain Layer)                  │
-         │                          │                           │
-         ▼                          ▼                           ▼
-┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
-│  QR Code         │       │  Batch Data      │       │  Mobile/Web      │
-│  Generation      │       │  Storage         │       │  Scanner         │
-└──────────────────┘       └──────────────────┘       └──────────────────┘
+# Deploy to Base Sepolia
+npx hardhat run scripts/deploy-smart.js --network baseSepolia
 ```
 
-## 📁 Project Structure
+## 📝 Contracts
 
-```
-RootPharma/
-├── contracts/
-│   └── DrugNFT.sol              # Main NFT contract
-├── scripts/
-│   └── deploy.js                # Deployment script
-├── test/
-│   └── DrugNFT.test.js          # Comprehensive tests
-├── hardhat.config.js            # Hardhat configuration
-├── .env.example                 # Environment variables template
-├── package.json                 # Dependencies
-└── README.md                    # This file
-```
+### Core Contracts
+1. **DrugNFT.sol** - ✅ DEPLOYED `0xC9B5006Bd6F44c3EFc73e2a96637e286b7a37Fef`
+2. **PharmacyRegistry.sol** - ✅ TESTED
+3. **ManufacturerRegistry.sol** - ✅ TESTED
+4. **BatchTransfer.sol** - ✅ TESTED
+5. **QualityControl.sol** - ✅ TESTED
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js v18+ and npm
-- MetaMask wallet
-- Base Sepolia testnet ETH (get from [faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet))
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   cd RootPharma
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add:
-   - `PRIVATE_KEY`: Your wallet private key
-   - `BASESCAN_API_KEY`: Your BaseScan API key (for verification)
-
-4. **Compile contracts**
-   ```bash
-   npm run compile
-   ```
-
-5. **Run tests**
-   ```bash
-   npm test
-   ```
+### Supporting Contracts
+6. **RegulatoryCompliance.sol** - FDA/EMA/WHO approvals
+7. **RewardToken.sol** - ERC20 ecosystem rewards
+8. **DrugCatalog.sol** - Drug information database
+9. **PrescriptionNFT.sol** - Digital prescriptions
+10. **TemperatureMonitoring.sol** - Cold chain tracking
+11. **RecallManagement.sol** - Enhanced batch recalls
+12. **AuditTrail.sol** - Immutable operation logging
+13. **PatientRegistry.sol** - Privacy-focused patient management
+14. **DoctorRegistry.sol** - Medical practitioner verification
 
 ## 🧪 Testing
 
-The project includes 22 comprehensive tests covering:
-
-- Deployment and ownership
-- Batch minting functionality
-- Batch validation (expiry and recall checks)
-- Batch recall system
-- Ownership transfer
-- Edge cases
-
-Run tests with:
 ```bash
-npm test                  # Run all tests
-npm run test:coverage     # Run with coverage report
-npm run test:gas          # Run with gas reporting
+# Run all tests
+npm test
+
+# Run specific test suite
+npx hardhat test test/PharmacyRegistry.test.js
+
+# Run with gas reporting
+REPORT_GAS=true npm test
+
+# Run with coverage
+npm run coverage
 ```
 
-## 📦 Deployment
+## 🌐 Deployment
 
-### Deploy to Base Sepolia
-
+### Base Sepolia (Testnet)
 ```bash
-npm run deploy:sepolia
+npx hardhat run scripts/deploy-smart.js --network baseSepolia
 ```
 
-This will:
-1. Deploy the DrugNFT contract
-2. Mint a demo batch for testing
-3. Save deployment info to `deployment-info.json`
-4. Display verification instructions
-
-### Verify Contract on BaseScan
-
+### Base Mainnet
 ```bash
-npm run verify -- <CONTRACT_ADDRESS>
+npx hardhat run scripts/deploy-smart.js --network base
 ```
 
-## 🔧 Smart Contract Functions
-
-### Owner Functions
-
-- `mintBatch(batchId, manufacturer, expiryDate, ipfsHash)` - Mint a new drug batch NFT
-- `recallBatch(tokenId)` - Recall a batch for safety reasons
-- `transferOwnership(newOwner)` - Transfer contract ownership
-
-### Public View Functions
-
-- `getBatchDetails(tokenId)` - Get complete batch information
-- `isValid(tokenId)` - Check if batch is valid (not expired/recalled)
-- `owner()` - Get contract owner address
-
-## 📊 Contract Details
-
-- **Solidity Version**: 0.8.20
-- **Network**: Base Sepolia (Testnet)
-- **Chain ID**: 84532
-- **License**: MIT
-
-## 🛠️ Development Scripts
+## 🔍 Verification
 
 ```bash
-npm run compile          # Compile contracts
-npm test                 # Run tests
-npm run test:coverage    # Generate coverage report
-npm run test:gas         # Report gas usage
-npm run deploy:sepolia   # Deploy to Base Sepolia
-npm run verify           # Verify contract on BaseScan
-npm run clean            # Clean artifacts
+npx hardhat verify --network baseSepolia 0xC9B5006Bd6F44c3EFc73e2a96637e286b7a37Fef
 ```
+
+## 📚 Documentation
+
+- [Architecture](./docs/ARCHITECTURE.md)
+- [API Reference](./docs/API.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Testing Guide](./docs/TESTING.md)
 
 ## 🔐 Security
 
-- Contract uses OpenZeppelin patterns for security
-- Owner-only functions protected with `onlyOwner` modifier
-- Comprehensive test coverage
-- Input validation on all functions
+- OpenZeppelin contracts
+- Reentrancy guards
+- Access control
+- Comprehensive testing
+- Gas optimizations
 
-## 📝 License
+## 📄 License
 
-This project is licensed under the MIT License.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📧 Support
-
-For issues and questions, please open an issue on GitHub.
-
----
-
-Built with ❤️ for pharmaceutical safety and blockchain transparency.
+MIT

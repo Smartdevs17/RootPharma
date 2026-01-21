@@ -1,0 +1,10 @@
+{
+  "network": "baseSepolia",
+  "chainId": 84532,
+  "contractAddress": "0xC9B5006Bd6F44c3EFc73e2a96637e286b7a37Fef",
+  "deployer": "0x575109e921C6d6a1Cb7cA60Be0191B10950AfA6C",
+  "deploymentTime": "2026-01-20T13:47:27.401Z",
+  "blockNumber": 36574279,
+  "demoBatchId": "BATCH-DEMO-001",
+  "demoTokenId": 1
+}

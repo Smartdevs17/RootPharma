@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers.js";
 
 describe("QualityControl", function () {
@@ -40,22 +41,25 @@ describe("QualityControl", function () {
       
       await qc.authorizeInspector(inspector1.address);
       
-      await expect(qc.connect(inspector1).recordQualityCheck(
+      await expect(qc.connect(inspector1).performQualityCheck(
         1,
         true,
-        "All tests passed",
+        "Purity",
+        "99%",
         "Lab Report #123"
-      )).to.emit(qc, "QualityCheckRecorded");
+      )).to.emit(qc, "QualityCheckPerformed")
+        .withArgs(1, inspector1.address, true);
     });
     
     it("Should fail if not authorized inspector", async function () {
       const { qc, unauthorized } = await loadFixture(deployFixture);
       
       await expect(
-        qc.connect(unauthorized).recordQualityCheck(
+        qc.connect(unauthorized).performQualityCheck(
           1,
           true,
-          "Test",
+          "Purity",
+          "99%",
           "Report"
         )
       ).to.be.revertedWith("Not authorized");
@@ -65,14 +69,15 @@ describe("QualityControl", function () {
       const { qc, inspector1 } = await loadFixture(deployFixture);
       
       await qc.authorizeInspector(inspector1.address);
-      await qc.connect(inspector1).recordQualityCheck(
+      await qc.connect(inspector1).performQualityCheck(
         1,
         true,
-        "Passed",
+        "Purity",
+        "99%",
         "Report"
       );
       
-      expect(await qc.isCompliant(1)).to.be.true;
+      expect(await qc.hasPassedQualityControl(1)).to.be.true;
     });
   });
 });

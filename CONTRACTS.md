@@ -8,7 +8,7 @@ The `DrugNFT` contract is a simplified ERC-721 style NFT implementation designed
 
 ### Contract Address
 
-- **Base Sepolia**: TBD (Deploy using `npm run deploy:sepolia`)
+- **Base Sepolia**: `0xC9B5006Bd6F44c3EFc73e2a96637e286b7a37Fef`
 - **Base Mainnet**: Not deployed
 
 ### Key Features
@@ -322,21 +322,58 @@ npm test
 
 ---
 
-### Future Enhancements
+## Registry Contracts
 
-Potential improvements for production deployment:
+### PharmacyRegistry
+- **Base Sepolia**: `0xd4C7c06008ec2EdD2dd755F3721aE61A56a0b6F7`
 
-1. **Batch Transfer**: Enable transfer of batch ownership between distributors
-2. **Multi-signature**: Require multiple approvals for critical operations
-3. **Batch Updates**: Allow updating IPFS hash for additional documentation
-4. **Supply Chain Tracking**: Track batch movement through supply chain
-5. **Integration with ERC-721**: Full ERC-721 compliance for marketplace compatibility
-6. **Pausable**: Add emergency pause functionality
-7. **Role-Based Access**: Multiple roles (manufacturer, distributor, regulator)
+### ManufacturerRegistry
+- **Base Sepolia**: `0x80CF0C026c825b0F62a91353A35E3Dae3Ae45FE1`
 
----
+### DistributorRegistry
+- **Base Sepolia**: `0xC31FF1E54Bd37475Bba8EDA4594A3F67017Cc9e8`
 
-### License
+### DoctorRegistry
+- **Base Sepolia**: `0x4416083a7D56274a2B99FC004209CF16367d161d`
 
-MIT License - See LICENSE file for details
-<- Added validation Validated -->
+### PatientRegistry
+- **Base Sepolia**: `0x9EEcbDEAB648FF6EfE4b1768BeA7284b26B6aAA9`
+
+## Supply Chain & Tracking
+
+### BatchTransfer
+- **Base Sepolia**: `0x5B58a9B053Df3ea369f25154489620e44f21feE8`
+
+### QualityControl
+- **Base Sepolia**: `0x2459e24E3Ae52237BFd7fBb61E65bF2f291bB099`
+
+### TemperatureMonitoring
+- **Base Sepolia**: `0x44A370C3DD448672620dBb7a059F49F26157765C`
+
+### RecallManagement
+- **Base Sepolia**: `0xEa11a1165e732F1C6f7aAc84cc10327FA5D6a14A`
+
+## Functional Contracts
+
+### DrugCatalog
+- **Base Sepolia**: `0x2148eE18149EbC36878B94f2C6E598a27f5A3C2B`
+
+### RegulatoryCompliance
+- **Base Sepolia**: `0xa39192E571225B85e43EEe065F0e585f033B92B1`
+
+### RewardToken
+- **Base Sepolia**: `0xb94dbb5a5F12c2b37797F6D080cF3830adF2F2ff`
+
+### PrescriptionNFT
+- **Base Sepolia**: `0x2F8EB311bcA92eb1c4AEE095511F34Cb2F2d7967`
+
+## Infrastructure & Integration
+
+### AuditTrail
+- **Base Sepolia**: `0xC69d2D0f9093901f4Cf6b5f9d82b7D2657aB9B3C`
+
+### SupplyChainIntegration
+- **Base Sepolia**: `0x738419f247bE2accBA8C72574e0B1e899eAaD365`
+
+### PrescriptionVerifier
+- **Base Sepolia**: `0xcC9A77027D4E39f9861Be2573F569cE3b5325D51`

@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers.js";
 
 describe("RewardToken", function () {
@@ -23,18 +24,19 @@ describe("RewardToken", function () {
     it("Should set max supply", async function () {
       const { token } = await loadFixture(deployFixture);
       
-      expect(await token.maxSupply()).to.equal(ethers.parseEther("1000000"));
+      expect(await token.MAX_SUPPLY()).to.equal(ethers.parseEther("1000000000"));
     });
   });
   
   describe("Minting", function () {
     it("Should allow minter to mint", async function () {
-      const { token, owner, minter, user1 } = await loadFixture(deployFixture);
+      const { token, minter, user1 } = await loadFixture(deployFixture);
       
       await token.addMinter(minter.address);
       
-      await expect(token.connect(minter).mint(user1.address, ethers.parseEther("100")))
-        .to.emit(token, "Transfer");
+      await expect(token.connect(minter).mintRewards(user1.address, ethers.parseEther("100")))
+        .to.emit(token, "RewardsMinted")
+        .withArgs(user1.address, ethers.parseEther("100"));
       
       expect(await token.balanceOf(user1.address)).to.equal(ethers.parseEther("100"));
     });
@@ -43,24 +45,26 @@ describe("RewardToken", function () {
       const { token, user1, user2 } = await loadFixture(deployFixture);
       
       await expect(
-        token.connect(user1).mint(user2.address, ethers.parseEther("100"))
-      ).to.be.revertedWith("Not a minter");
+        token.connect(user1).mintRewards(user2.address, ethers.parseEther("100"))
+      ).to.be.revertedWith("Not authorized to mint");
     });
     
     it("Should fail if exceeds max supply", async function () {
-      const { token, owner, user1 } = await loadFixture(deployFixture);
+      const { token, user1 } = await loadFixture(deployFixture);
       
+      // Attempt to mint more than MAX_SUPPLY
+      const overAmount = ethers.parseEther("1000000001");
       await expect(
-        token.mint(user1.address, ethers.parseEther("2000000"))
+        token.mintRewards(user1.address, overAmount)
       ).to.be.revertedWith("Exceeds max supply");
     });
   });
   
   describe("Burning", function () {
     it("Should allow burning", async function () {
-      const { token, owner, user1 } = await loadFixture(deployFixture);
+      const { token, user1 } = await loadFixture(deployFixture);
       
-      await token.mint(user1.address, ethers.parseEther("100"));
+      await token.mintRewards(user1.address, ethers.parseEther("100"));
       
       await expect(token.connect(user1).burn(ethers.parseEther("50")))
         .to.emit(token, "Transfer");

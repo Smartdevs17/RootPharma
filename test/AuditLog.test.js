@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 
 describe("AuditLog", function () {
   it("Should deploy audit log mock", async function () {

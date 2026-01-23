@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers.js";
 
 describe("BatchTransfer", function () {
@@ -16,13 +17,22 @@ describe("BatchTransfer", function () {
     it("Should initiate a transfer successfully", async function () {
       const { batchTransfer, manufacturer, pharmacy } = await loadFixture(deployFixture);
       
-      await expect(batchTransfer.connect(manufacturer).initiateTransfer(
+      const tx = await batchTransfer.connect(manufacturer).initiateTransfer(
         1,
-        manufacturer.address,
         pharmacy.address,
+        "London",
         "Batch shipment to pharmacy"
-      )).to.emit(batchTransfer, "TransferInitiated")
-        .withArgs(1, 1, manufacturer.address, pharmacy.address);
+      );
+      
+      const receipt = await tx.wait();
+      const event = receipt.logs.find(log => log.fragment && log.fragment.name === "TransferInitiated");
+      expect(event).to.not.be.undefined;
+      expect(event.args[0]).to.equal(1);
+      expect(event.args[1]).to.equal(manufacturer.address);
+      expect(event.args[2]).to.equal(pharmacy.address);
+      
+      const block = await ethers.provider.getBlock(receipt.blockNumber);
+      expect(event.args[3]).to.equal(block.timestamp);
     });
     
     it("Should fail with invalid addresses", async function () {
@@ -32,10 +42,10 @@ describe("BatchTransfer", function () {
         batchTransfer.connect(manufacturer).initiateTransfer(
           1,
           ethers.ZeroAddress,
-          manufacturer.address,
-          "Test"
+          "Test",
+          "Notes"
         )
-      ).to.be.revertedWith("Invalid addresses");
+      ).to.be.revertedWith("Invalid recipient");
     });
   });
   
@@ -45,16 +55,15 @@ describe("BatchTransfer", function () {
       
       await batchTransfer.connect(manufacturer).initiateTransfer(
         1,
-        manufacturer.address,
         pharmacy.address,
+        "London",
         "Shipment"
       );
       
       await expect(batchTransfer.connect(pharmacy).confirmReceipt(1))
-        .to.emit(batchTransfer, "TransferConfirmed");
+        .to.emit(batchTransfer, "TransferReceived");
       
-      const transfer = await batchTransfer.getTransfer(1);
-      expect(transfer.isConfirmed).to.be.true;
+      expect(await batchTransfer.currentHolder(1)).to.equal(pharmacy.address);
     });
     
     it("Should fail if not recipient", async function () {
@@ -62,14 +71,14 @@ describe("BatchTransfer", function () {
       
       await batchTransfer.connect(manufacturer).initiateTransfer(
         1,
-        manufacturer.address,
         pharmacy.address,
+        "London",
         "Shipment"
       );
       
       await expect(
         batchTransfer.connect(distributor).confirmReceipt(1)
-      ).to.be.revertedWith("Not recipient");
+      ).to.be.revertedWith("Not the recipient");
     });
   });
   
@@ -79,8 +88,8 @@ describe("BatchTransfer", function () {
       
       await batchTransfer.connect(manufacturer).initiateTransfer(
         1,
-        manufacturer.address,
         distributor.address,
+        "Hub 1",
         "To distributor"
       );
       
@@ -88,12 +97,12 @@ describe("BatchTransfer", function () {
       
       await batchTransfer.connect(distributor).initiateTransfer(
         1,
-        distributor.address,
         pharmacy.address,
+        "Hub 2",
         "To pharmacy"
       );
       
-      const history = await batchTransfer.getBatchHistory(1);
+      const history = await batchTransfer.getTransferHistory(1);
       expect(history.length).to.equal(2);
     });
   });

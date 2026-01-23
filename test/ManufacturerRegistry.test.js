@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers.js";
 
 describe("ManufacturerRegistry", function () {

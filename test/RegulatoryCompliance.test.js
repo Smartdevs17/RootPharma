@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import pkg from "hardhat";
+const { ethers } = pkg;
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers.js";
 
 describe("RegulatoryCompliance", function () {
@@ -16,64 +17,53 @@ describe("RegulatoryCompliance", function () {
     it("Should recognize regulatory body", async function () {
       const { compliance, regulator1 } = await loadFixture(deployFixture);
       
-      await expect(compliance.recognizeRegulatoryBody(
-        "FDA",
-        "USA",
-        regulator1.address
-      )).to.emit(compliance, "RegulatoryBodyRecognized");
+      await expect(compliance.recognizeRegulatoryBody("FDA_US"))
+        .to.emit(compliance, "RegulatoryBodyRecognized")
+        .withArgs("FDA_US");
       
-      expect(await compliance.isRecognizedBody(regulator1.address)).to.be.true;
-    });
-    
-    it("Should fail with invalid address", async function () {
-      const { compliance } = await loadFixture(deployFixture);
-      
-      await expect(
-        compliance.recognizeRegulatoryBody("FDA", "USA", ethers.ZeroAddress)
-      ).to.be.revertedWith("Invalid address");
+      expect(await compliance.recognizedRegulatoryBodies("FDA_US")).to.be.true;
     });
   });
   
   describe("Approval Management", function () {
     it("Should grant approval", async function () {
-      const { compliance, regulator1 } = await loadFixture(deployFixture);
+      const { compliance, owner } = await loadFixture(deployFixture);
       
-      await compliance.recognizeRegulatoryBody("FDA", "USA", regulator1.address);
-      
-      await expect(compliance.connect(regulator1).grantApproval(
+      const expiry = Math.floor(Date.now() / 1000) + 3600;
+      await expect(compliance.grantApproval(
         1,
-        "Approved for distribution"
-      )).to.emit(compliance, "ApprovalGranted");
+        "FDA",
+        "APP-123",
+        expiry,
+        "QmHash"
+      )).to.emit(compliance, "ApprovalGranted")
+        .withArgs(1, "FDA");
       
-      expect(await compliance.isApproved(1, regulator1.address)).to.be.true;
+      expect(await compliance.isCompliant(1)).to.be.true;
     });
     
     it("Should revoke approval", async function () {
-      const { compliance, regulator1 } = await loadFixture(deployFixture);
+      const { compliance } = await loadFixture(deployFixture);
       
-      await compliance.recognizeRegulatoryBody("FDA", "USA", regulator1.address);
-      await compliance.connect(regulator1).grantApproval(1, "Approved");
+      const expiry = Math.floor(Date.now() / 1000) + 3600;
+      await compliance.grantApproval(1, "FDA", "APP-123", expiry, "QmHash");
       
-      await expect(compliance.connect(regulator1).revokeApproval(
-        1,
-        "Safety concerns"
-      )).to.emit(compliance, "ApprovalRevoked");
+      await expect(compliance.revokeApproval(1, 0))
+        .to.emit(compliance, "ApprovalRevoked")
+        .withArgs(1, "FDA");
       
-      expect(await compliance.isApproved(1, regulator1.address)).to.be.false;
+      expect(await compliance.isCompliant(1)).to.be.false;
     });
   });
   
   describe("Compliance Checks", function () {
-    it("Should check full compliance", async function () {
-      const { compliance, regulator1, regulator2 } = await loadFixture(deployFixture);
+    it("Should check compliance", async function () {
+      const { compliance } = await loadFixture(deployFixture);
       
-      await compliance.recognizeRegulatoryBody("FDA", "USA", regulator1.address);
-      await compliance.recognizeRegulatoryBody("EMA", "EU", regulator2.address);
+      const expiry = Math.floor(Date.now() / 1000) + 3600;
+      await compliance.grantApproval(1, "FDA", "APP-123", expiry, "QmHash");
       
-      await compliance.connect(regulator1).grantApproval(1, "Approved");
-      await compliance.connect(regulator2).grantApproval(1, "Approved");
-      
-      expect(await compliance.isFullyCompliant(1)).to.be.true;
+      expect(await compliance.isCompliant(1)).to.be.true;
     });
   });
 });

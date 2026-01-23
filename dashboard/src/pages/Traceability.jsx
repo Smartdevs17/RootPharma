@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Search, MapPin, Thermometer, User, Clock, AlertTriangle, ShieldCheck, History, Loader2, ArrowDown } from "lucide-react";
-import { useWeb3 } from "../../context/Web3Context";
+import { useWeb3 } from "../context/Web3Context";
 
 const Traceability = () => {
     const { contracts } = useWeb3();

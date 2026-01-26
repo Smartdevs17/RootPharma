@@ -8,6 +8,12 @@ const PharmacyDashboard = () => {
     const [rxDetails, setRxDetails] = useState(null);
     const [loading, setLoading] = useState(false);
     const [filling, setFilling] = useState(false);
+    const [receiving, setReceiving] = useState(false);
+    const [showReceiveModal, setShowReceiveModal] = useState(false);
+    const [receiveData, setReceiveData] = useState({
+        batchId: "",
+        quantity: ""
+    });
     const [error, setError] = useState(null);
 
     const lookupPrescription = async (e) => {
@@ -56,6 +62,28 @@ const PharmacyDashboard = () => {
             alert("Transaction failed: " + (err.reason || err.message));
         } finally {
             setFilling(false);
+        }
+    };
+
+    const handleReceive = async (e) => {
+        e.preventDefault();
+        try {
+            setReceiving(true);
+            // Simulate/Implement contract verification logic here
+            // In a real flow, this might call QualityControl.verifyBatch(batchId)
+            console.log("Receiving batch:", receiveData.batchId);
+
+            // Mocking a short delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            alert(`Batch ${receiveData.batchId} received and verified successfully!`);
+            setShowReceiveModal(false);
+            setReceiveData({ batchId: "", quantity: "" });
+        } catch (err) {
+            console.error("Receive failed", err);
+            alert("Error: " + err.message);
+        } finally {
+            setReceiving(false);
         }
     };
 
@@ -251,7 +279,10 @@ const PharmacyDashboard = () => {
                             <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
                             <span className="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
                         </div>
-                        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                        <button
+                            onClick={() => setShowReceiveModal(true)}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2"
+                        >
                             <ShieldCheck size={14} /> Receive Batch
                         </button>
                     </div>
@@ -289,6 +320,56 @@ const PharmacyDashboard = () => {
                     </table>
                 </div>
             </div>
+
+            {showReceiveModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-[#0f172a] border border-emerald-500/30 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <ShieldCheck className="text-emerald-400" /> Confirm Receipt
+                        </h3>
+                        <form onSubmit={handleReceive} className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-400">Batch Identity #</label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="e.g. B-2023-XY42"
+                                    className="w-full bg-[#1e293b] border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500"
+                                    value={receiveData.batchId}
+                                    onChange={e => setReceiveData({ ...receiveData, batchId: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-400">Inventory Quantity</label>
+                                <input
+                                    required
+                                    type="number"
+                                    placeholder="Number of units"
+                                    className="w-full bg-[#1e293b] border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:border-emerald-500"
+                                    value={receiveData.quantity}
+                                    onChange={e => setReceiveData({ ...receiveData, quantity: e.target.value })}
+                                />
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowReceiveModal(false)}
+                                    className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-3 rounded-xl font-bold transition-all"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={receiving}
+                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-700 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+                                >
+                                    {receiving ? <Loader2 className="animate-spin" size={20} /> : "Verify & Log"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -247,6 +247,55 @@ const PatientDashboard = () => {
                 </div>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 shadow-xl">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                        <AlertTriangle size={18} className="text-rose-400" /> Health Alerts
+                    </h4>
+                    <div className="space-y-3">
+                        <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 shrink-0">
+                                <Clock size={16} />
+                            </div>
+                            <div>
+                                <p className="text-white text-xs font-bold">Refill Due Soon</p>
+                                <p className="text-[10px] text-gray-500">Amoxicillin 500mg (Batch B-2023-X92) expires in 5 days.</p>
+                            </div>
+                        </div>
+                        <div className="p-3 bg-blue-500/5 border border-blue-500/10 rounded-xl flex gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
+                                <ShieldCheck size={16} />
+                            </div>
+                            <div>
+                                <p className="text-white text-xs font-bold">Network Verification</p>
+                                <p className="text-[10px] text-gray-500">Your Doctor credentials have been verified for Q2 2024.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 shadow-xl text-white">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                        <Coins size={18} className="text-[#fb7185]" /> Rewards Activity
+                    </h4>
+                    <div className="space-y-4">
+                        {[
+                            { label: "Adherence Bonus", amount: "+50 RPH", date: "Jan 22" },
+                            { label: "Verification Reward", amount: "+10 RPH", date: "Jan 18" },
+                            { label: "Facility Feedback", amount: "+25 RPH", date: "Jan 10" },
+                        ].map((log, i) => (
+                            <div key={i} className="flex justify-between items-center text-xs">
+                                <div>
+                                    <p className="font-bold">{log.label}</p>
+                                    <p className="text-[10px] text-gray-500 tracking-wider font-mono">{log.date}</p>
+                                </div>
+                                <span className="text-[#fb7185] font-black">{log.amount}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                 <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-[#1e293b]/30">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2">

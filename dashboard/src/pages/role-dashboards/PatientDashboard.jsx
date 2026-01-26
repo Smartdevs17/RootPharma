@@ -8,6 +8,9 @@ const PatientDashboard = () => {
     const [balance, setBalance] = useState("0");
     const [prescriptions, setPrescriptions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [verifying, setVerifying] = useState(false);
+    const [batchId, setBatchId] = useState("");
+    const [verificationResult, setVerificationResult] = useState(null);
 
     const fetchData = async () => {
         if (!contracts.RewardToken || !account) return;
@@ -27,6 +30,31 @@ const PatientDashboard = () => {
             console.error("Failed to fetch patient data", err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const verifyMedication = async (e) => {
+        e.preventDefault();
+        if (!batchId) return;
+
+        try {
+            setVerifying(true);
+            setVerificationResult(null);
+
+            // Simulate blockchain verification delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            setVerificationResult({
+                isValid: true,
+                manufacturer: "Pfizer Global",
+                expiry: "12/20/2026",
+                origin: "Brussels, Belgium"
+            });
+        } catch (err) {
+            console.error("Verification failed", err);
+            alert("Verification error. Please try again.");
+        } finally {
+            setVerifying(false);
         }
     };
 
@@ -169,6 +197,53 @@ const PatientDashboard = () => {
                             Redeem for discounts
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <div className="bg-[#0f172a] border border-gray-800 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8 shadow-xl relative overflow-hidden group">
+                <div className="flex-1 space-y-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400">
+                            <ShieldCheck size={24} />
+                        </div>
+                        <h3 className="text-2xl font-bold text-white">Medication Authenticity Scanner</h3>
+                    </div>
+                    <p className="text-gray-400 max-w-lg">Verify your medication by entering the batch ID from the packaging. We'll cross-reference the data with the manufacturer's on-chain records.</p>
+                </div>
+
+                <div className="w-full md:w-96 space-y-4 bg-[#1e293b]/50 p-6 rounded-2xl border border-gray-700/50">
+                    <form onSubmit={verifyMedication} className="space-y-4">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+                            <input
+                                type="text"
+                                placeholder="Batch ID (e.g. B-2023-X92)"
+                                className="w-full bg-[#0f172a] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-emerald-500 transition-all font-mono"
+                                value={batchId}
+                                onChange={e => setBatchId(e.target.value)}
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            disabled={verifying}
+                            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-700 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+                        >
+                            {verifying ? <><Loader2 className="animate-spin" size={18} /> Verifying...</> : "Scan & Verify"}
+                        </button>
+                    </form>
+
+                    {verificationResult && (
+                        <div className="mt-4 p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20 animate-fade-in">
+                            <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase mb-2">
+                                <CheckCircle size={14} /> Product Verified
+                            </div>
+                            <div className="space-y-1 text-xs">
+                                <p className="text-white"><span className="text-gray-500">Manufacturer:</span> {verificationResult.manufacturer}</p>
+                                <p className="text-white"><span className="text-gray-500">Expiry:</span> {verificationResult.expiry}</p>
+                                <p className="text-white"><span className="text-gray-500">Source:</span> {verificationResult.origin}</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -11,6 +11,13 @@ const AuditorDashboard = () => {
         doctors: 0
     });
     const [loading, setLoading] = useState(true);
+    const [recalling, setRecalling] = useState(false);
+    const [showRecallModal, setShowRecallModal] = useState(false);
+    const [recallData, setRecallData] = useState({
+        batchId: "",
+        reason: "",
+        severity: "HIGH"
+    });
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -39,6 +46,27 @@ const AuditorDashboard = () => {
 
         fetchStats();
     }, [contracts]);
+
+    const handleRecall = async (e) => {
+        e.preventDefault();
+        try {
+            setRecalling(true);
+            // Simulate contract interaction with QualityControl.sol
+            console.log("Initiating recall for batch:", recallData.batchId);
+
+            // Artificial delay for blockchain simulation
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            alert(`GLOBAL RECALL ISSUED for Batch ${recallData.batchId}. All downstream nodes have been notified.`);
+            setShowRecallModal(false);
+            setRecallData({ batchId: "", reason: "", severity: "HIGH" });
+        } catch (err) {
+            console.error("Recall failed", err);
+            alert("Error issuing recall: " + err.message);
+        } finally {
+            setRecalling(false);
+        }
+    };
 
     const networkMetrics = [
         { label: "Manufacturing Nodes", value: stats.manufacturers, trend: "+2", icon: <Database size={20} />, color: "blue" },
@@ -159,11 +187,15 @@ const AuditorDashboard = () => {
                     <h3 className="text-xl font-bold text-white mb-6">Auditor Tools</h3>
                     <div className="space-y-4">
                         {[
-                            { label: "Revoke Facility Access", desc: "Emergency shutdown of compromised nodes", icon: <ShieldAlert size={18} />, color: "red" },
-                            { label: "Global Recall Broadcast", desc: "Broadcast recall intent across and verify receipt", icon: <Globe size={18} />, color: "amber" },
-                            { label: "inspect Batch History", desc: "Deep dive into L2 transaction sequence", icon: <Search size={18} />, color: "blue" },
+                            { label: "Revoke Facility Access", desc: "Emergency shutdown of compromised nodes", icon: <ShieldAlert size={18} />, color: "red", action: () => alert("Facility revocation layer active. Select node to revoke.") },
+                            { label: "Global Recall Broadcast", desc: "Broadcast recall intent and verify receipt", icon: <Globe size={18} />, color: "amber", action: () => setShowRecallModal(true) },
+                            { label: "Inspect Batch History", desc: "Deep dive into L2 transaction sequence", icon: <Search size={18} />, color: "blue", action: () => alert("Blockchain explorer integration coming soon.") },
                         ].map((tool, i) => (
-                            <button key={i} className="w-full text-left p-4 rounded-xl border border-gray-800 hover:border-gray-700 hover:bg-white/5 group transition-all flex items-center justify-between">
+                            <button
+                                key={i}
+                                onClick={tool.action}
+                                className="w-full text-left p-4 rounded-xl border border-gray-800 hover:border-gray-700 hover:bg-white/5 group transition-all flex items-center justify-between"
+                            >
                                 <div>
                                     <p className={`font-bold text-xs uppercase text-${tool.color}-400 mb-1 flex items-center gap-2`}>
                                         {tool.icon} {tool.label}
@@ -223,6 +255,74 @@ const AuditorDashboard = () => {
                     </table>
                 </div>
             </div>
+
+            {showRecallModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+                    <div className="bg-[#0f172a] border border-amber-500/50 rounded-3xl p-8 w-full max-w-lg shadow-2xl relative">
+                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 border border-amber-500/20 backdrop-blur-xl">
+                            <ShieldAlert size={48} />
+                        </div>
+                        <h3 className="text-2xl font-black text-white mt-8 mb-2 text-center">EMERGENCY RECALL TRIGGER</h3>
+                        <p className="text-gray-400 text-sm mb-8 text-center italic">Initiating this action will broadcast a high-priority recall event across the entire RootPharma network.</p>
+
+                        <form onSubmit={handleRecall} className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Target Batch ID</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        placeholder="B-2023-..."
+                                        className="w-full bg-[#1e293b] border border-gray-700 rounded-xl p-3 text-white focus:outline-none focus:border-amber-500 font-mono text-sm"
+                                        value={recallData.batchId}
+                                        onChange={e => setRecallData({ ...recallData, batchId: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Severity Level</label>
+                                    <select
+                                        className="w-full bg-[#1e293b] border border-gray-700 rounded-xl p-3 text-white focus:outline-none focus:border-amber-500 text-sm"
+                                        value={recallData.severity}
+                                        onChange={e => setRecallData({ ...recallData, severity: e.target.value })}
+                                    >
+                                        <option value="LOW">LOW - NON CRITICAL</option>
+                                        <option value="MEDIUM">MEDIUM - CAUTION</option>
+                                        <option value="HIGH">HIGH - EMERGENCY</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reason for Recall</label>
+                                <textarea
+                                    required
+                                    rows="3"
+                                    placeholder="Briefly describe the violation or risk..."
+                                    className="w-full bg-[#1e293b] border border-gray-700 rounded-xl p-3 text-white focus:outline-none focus:border-amber-500 text-sm"
+                                    value={recallData.reason}
+                                    onChange={e => setRecallData({ ...recallData, reason: e.target.value })}
+                                ></textarea>
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowRecallModal(false)}
+                                    className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-4 rounded-2xl font-bold transition-all"
+                                >
+                                    ABORT ACTION
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={recalling}
+                                    className="flex-1 bg-amber-600 hover:bg-amber-700 disabled:bg-gray-700 text-white py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+                                >
+                                    {recalling ? "EXECUTING..." : "COMMIT RECALL"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

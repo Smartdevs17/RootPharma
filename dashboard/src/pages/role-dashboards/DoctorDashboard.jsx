@@ -52,10 +52,25 @@ const DoctorDashboard = () => {
                 formData.notes
             );
 
+            console.log("Prescription issuance tx sent:", tx.hash);
             await tx.wait();
-            alert("Prescription Issued Successfully!");
+
+            // Refresh prescriptions after issuance
+            await fetchPrescriptions();
+
+            // Reset form and UI state
             setShowIssueForm(false);
-            fetchPrescriptions();
+            setFormData({
+                patientAddress: "",
+                patientId: "",
+                doctorId: "",
+                drugId: "",
+                dosage: "",
+                expiryDate: "",
+                notes: ""
+            });
+
+            alert("Prescription Issued Successfully!");
         } catch (err) {
             console.error("Issuance failed", err);
             alert("Error: " + (err.reason || err.message));
@@ -171,6 +186,68 @@ const DoctorDashboard = () => {
                 </div>
             )}
 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400">
+                            <FilePlus size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Total Rx</p>
+                            <h4 className="text-2xl font-bold text-white">842</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500" style={{ width: "75%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                            <CheckCircle size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Fill Rate</p>
+                            <h4 className="text-2xl font-bold text-white">92%</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500" style={{ width: "92%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                            <User size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Patients</p>
+                            <h4 className="text-2xl font-bold text-white">156</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500" style={{ width: "60%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
+                            <Clock size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Pending</p>
+                            <h4 className="text-2xl font-bold text-white">12</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500" style={{ width: "30%" }}></div>
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div className="lg:col-span-3 bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden">
                     <div className="p-6 border-b border-gray-800 flex justify-between items-center">
@@ -191,8 +268,8 @@ const DoctorDashboard = () => {
                                     <th className="px-6 py-4">Prescription ID</th>
                                     <th className="px-6 py-4">Patient</th>
                                     <th className="px-6 py-4">Drug Name</th>
-                                    <th className="px-6 py-4">Issued On</th>
                                     <th className="px-6 py-4">Status</th>
+                                    <th className="px-6 py-4">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-800">
@@ -211,12 +288,14 @@ const DoctorDashboard = () => {
                                                 <span className="text-gray-300 text-sm">{rx.drug}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-gray-500 text-xs">{rx.date}</td>
                                         <td className="px-6 py-4">
                                             <span className={`px-2 py-1 rounded text-[10px] font-bold ${rx.status === 'Active' ? 'bg-blue-500/10 text-blue-400' : 'bg-emerald-500/10 text-emerald-400'
                                                 }`}>
                                                 {rx.status.toUpperCase()}
                                             </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <button className="text-gray-400 hover:text-white text-xs underline">Details</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -228,23 +307,19 @@ const DoctorDashboard = () => {
                 <div className="space-y-6">
                     <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6">
                         <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-                            <Calendar size={18} className="text-blue-400" /> Clinic Stats
+                            <Calendar size={18} className="text-blue-400" /> Recent Activity
                         </h4>
-                        <div className="space-y-6">
-                            <div>
-                                <label className="text-xs text-gray-500 font-bold uppercase block mb-1">Total Rx Issued</label>
-                                <div className="text-2xl font-black text-white">842</div>
-                            </div>
-                            <div>
-                                <label className="text-xs text-gray-500 font-bold uppercase block mb-1">Fill Rate</label>
-                                <div className="text-2xl font-black text-emerald-400">92%</div>
-                            </div>
-                            <div>
-                                <label className="text-xs text-gray-500 font-bold uppercase block mb-1">Authorization Status</label>
-                                <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                                    <CheckCircle size={16} /> VERIFIED BY BOARD
+                        <div className="space-y-4">
+                            {[
+                                { label: "Rx Signed", time: "10m ago", desc: "Patient 0x33...1a2b" },
+                                { label: "Verification", time: "2h ago", desc: "Doctor credentials verified" },
+                                { label: "Consultation", time: "4h ago", desc: "New patient entry" },
+                            ].map((log, i) => (
+                                <div key={i} className="pl-4 border-l-2 border-gray-800 space-y-1">
+                                    <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">{log.label} • {log.time}</p>
+                                    <p className="text-sm text-gray-300">{log.desc}</p>
                                 </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>

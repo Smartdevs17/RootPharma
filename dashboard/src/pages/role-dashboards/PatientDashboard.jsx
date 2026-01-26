@@ -306,10 +306,10 @@ const PatientDashboard = () => {
                 <div className="p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {prescriptions.map((rx) => (
-                            <div key={rx.id} className="bg-[#1e293b] border border-gray-700/50 p-6 rounded-2xl hover:border-blue-500/30 transition-all group">
+                            <div key={rx.id} className="bg-[#1e293b] border border-gray-700/50 p-6 rounded-2xl hover:border-blue-500/30 transition-all group relative overflow-hidden">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
                                             <Pill size={18} />
                                         </div>
                                         <div>
@@ -322,10 +322,24 @@ const PatientDashboard = () => {
                                         {rx.status.toUpperCase()}
                                     </span>
                                 </div>
-                                <div className="flex items-center justify-between text-[10px] text-gray-500 pt-4 border-t border-gray-800/50">
-                                    <span className="flex items-center gap-1"><ShieldCheck size={12} /> NFT # {rx.id}</span>
-                                    <span>ISSUED: {rx.date}</span>
+                                <div className="space-y-4 pt-4 border-t border-gray-800/50">
+                                    <div className="flex items-center justify-between text-[10px] text-gray-500">
+                                        <span className="flex items-center gap-1"><ShieldCheck size={12} /> NFT # {rx.id}</span>
+                                        <span>ISSUED: {rx.date}</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => alert(`Refill requested for ${rx.drug}. Your doctor has been notified.`)}
+                                            className="flex-1 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 py-1.5 rounded-lg text-[10px] font-bold transition-all"
+                                        >
+                                            Request Refill
+                                        </button>
+                                        <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-1.5 rounded-lg text-[10px] font-bold transition-all">
+                                            View Details
+                                        </button>
+                                    </div>
                                 </div>
+                                <div className="absolute -right-4 -bottom-4 w-12 h-12 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-500/10 transition-all"></div>
                             </div>
                         ))}
                     </div>

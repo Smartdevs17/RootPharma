@@ -49,6 +49,68 @@ const PatientDashboard = () => {
                 </button>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                            <ShieldCheck size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Adherence</p>
+                            <h4 className="text-2xl font-bold text-white">98%</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500" style={{ width: "98%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                            <Calendar size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Next Checkup</p>
+                            <h4 className="text-2xl font-bold text-white">2 Days</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500" style={{ width: "20%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400">
+                            <History size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Past Records</p>
+                            <h4 className="text-2xl font-bold text-white">24</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500" style={{ width: "100%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-rose-500/10 rounded-xl text-rose-400">
+                            <Pill size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Medications</p>
+                            <h4 className="text-2xl font-bold text-white">3 Active</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-rose-500" style={{ width: "45%" }}></div>
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-gray-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group shadow-2xl">
                     <div className="relative z-10">

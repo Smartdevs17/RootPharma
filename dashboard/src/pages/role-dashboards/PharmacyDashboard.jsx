@@ -246,9 +246,14 @@ const PharmacyDashboard = () => {
             <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-[#1e293b]/30">
                     <h3 className="text-lg font-bold text-white">Dispensary Inventory</h3>
-                    <div className="flex gap-2">
-                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
-                        <span className="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
+                    <div className="flex gap-4 items-center">
+                        <div className="flex gap-2">
+                            <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
+                            <span className="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
+                        </div>
+                        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                            <ShieldCheck size={14} /> Receive Batch
+                        </button>
                     </div>
                 </div>
                 <div className="overflow-x-auto">

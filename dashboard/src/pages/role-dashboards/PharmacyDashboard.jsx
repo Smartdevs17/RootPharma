@@ -15,6 +15,18 @@ const PharmacyDashboard = () => {
         quantity: ""
     });
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const inventory = [
+        { name: "Amoxicillin 500mg", batch: "B-2023-X92", stock: 450, expiry: "12/20/2026", status: "Healthy" },
+        { name: "Lisinopril 10mg", batch: "B-2023-Z44", stock: 120, expiry: "10/15/2025", status: "Low Stock" },
+        { name: "Metformin 850mg", batch: "B-2024-A12", stock: 890, expiry: "05/12/2027", status: "Healthy" },
+    ];
+
+    const filteredInventory = inventory.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.batch.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const lookupPrescription = async (e) => {
         e.preventDefault();
@@ -272,16 +284,28 @@ const PharmacyDashboard = () => {
             )}
 
             <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden">
-                <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-[#1e293b]/30">
-                    <h3 className="text-lg font-bold text-white">Dispensary Inventory</h3>
-                    <div className="flex gap-4 items-center">
+                <div className="p-6 border-b border-gray-800 flex flex-col md:flex-row justify-between items-center bg-[#1e293b]/30 gap-4">
+                    <div className="flex flex-col gap-1 w-full md:w-auto">
+                        <h3 className="text-lg font-bold text-white">Dispensary Inventory</h3>
                         <div className="flex gap-2">
-                            <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
-                            <span className="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
+                            <span className="text-[10px] font-bold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
+                            <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-4 items-center w-full md:w-auto">
+                        <div className="relative flex-1 md:w-64">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+                            <input
+                                type="text"
+                                placeholder="Search by name or batch..."
+                                className="w-full bg-[#0f172a] border border-gray-700 py-2 pl-9 pr-4 text-xs rounded-xl focus:outline-none focus:border-emerald-500"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
                         </div>
                         <button
                             onClick={() => setShowReceiveModal(true)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap"
                         >
                             <ShieldCheck size={14} /> Receive Batch
                         </button>
@@ -299,23 +323,27 @@ const PharmacyDashboard = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-800">
-                            {[
-                                { name: "Amoxicillin 500mg", batch: "B-2023-X92", stock: 450, expiry: "12/20/2026", status: "Healthy" },
-                                { name: "Lisinopril 10mg", batch: "B-2023-Z44", stock: 120, expiry: "10/15/2025", status: "Low Stock" },
-                                { name: "Metformin 850mg", batch: "B-2024-A12", stock: 890, expiry: "05/12/2027", status: "Healthy" },
-                            ].map((item, i) => (
-                                <tr key={i} className="hover:bg-white/5 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-white">{item.name}</td>
-                                    <td className="px-6 py-4 font-mono text-xs text-blue-400">{item.batch}</td>
-                                    <td className="px-6 py-4 text-gray-300">{item.stock} units</td>
-                                    <td className="px-6 py-4 text-gray-500">{item.expiry}</td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${item.status === 'Healthy' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
-                                            {item.status.toUpperCase()}
-                                        </span>
+                            {filteredInventory.length > 0 ? (
+                                filteredInventory.map((item, i) => (
+                                    <tr key={i} className="hover:bg-white/5 transition-colors">
+                                        <td className="px-6 py-4 font-medium text-white">{item.name}</td>
+                                        <td className="px-6 py-4 font-mono text-xs text-blue-400">{item.batch}</td>
+                                        <td className="px-6 py-4 text-gray-300">{item.stock} units</td>
+                                        <td className="px-6 py-4 text-gray-500">{item.expiry}</td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${item.status === 'Healthy' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                                                {item.status.toUpperCase()}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500 italic">
+                                        No medications matching "{searchTerm}"
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>

@@ -80,6 +80,47 @@ const AuditorDashboard = () => {
                 ))}
             </div>
 
+            <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-8">
+                <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                        <Activity size={20} className="text-emerald-400" /> Supply Chain Health
+                    </h3>
+                    <span className="text-xs text-gray-500">Last 30 Days Portfolio</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-500">
+                            <span>Temp Excursions</span>
+                            <span className="text-white">0.4%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: "99.6%" }}></div>
+                        </div>
+                        <p className="text-[10px] text-gray-600">-0.2% improvement from last mo</p>
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-500">
+                            <span>Recall Rate</span>
+                            <span className="text-white">0.02%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-blue-500 rounded-full" style={{ width: "99.98%" }}></div>
+                        </div>
+                        <p className="text-[10px] text-gray-600">Stable within regulatory limits</p>
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-500">
+                            <span>Transit Avg</span>
+                            <span className="text-white">4.2 Days</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-indigo-500 rounded-full" style={{ width: "85%" }}></div>
+                        </div>
+                        <p className="text-[10px] text-gray-600">+12% velocity efficiency</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
                     <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
@@ -98,7 +139,7 @@ const AuditorDashboard = () => {
                                 <div key={i} className="p-6 hover:bg-white/5 transition-colors flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className={`w-2 h-10 rounded-full ${event.severity === 'HIGH' ? 'bg-red-500' :
-                                                event.severity === 'MEDIUM' ? 'bg-amber-500' : 'bg-blue-500'
+                                            event.severity === 'MEDIUM' ? 'bg-amber-500' : 'bg-blue-500'
                                             }`}></div>
                                         <div>
                                             <p className="text-white font-bold">{event.desc}</p>

@@ -66,6 +66,68 @@ const PharmacyDashboard = () => {
                 <p className="text-gray-400">Verify patient NFTs and dispense medication securely.</p>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                            <CheckCircle2 size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Rx Filled</p>
+                            <h4 className="text-2xl font-bold text-white">342</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500" style={{ width: "88%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                            <Pill size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Inventory</p>
+                            <h4 className="text-2xl font-bold text-white">1.2k</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500" style={{ width: "65%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
+                            <ShieldCheck size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Verified Doctors</p>
+                            <h4 className="text-2xl font-bold text-white">48</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500" style={{ width: "95%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-red-500/10 rounded-xl text-red-400">
+                            <XCircle size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Recall Alerts</p>
+                            <h4 className="text-2xl font-bold text-white">2</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-red-500" style={{ width: "12%" }}></div>
+                    </div>
+                </div>
+            </div>
+
             <div className="max-w-xl mx-auto">
                 <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-8 shadow-2xl">
                     <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
@@ -105,7 +167,7 @@ const PharmacyDashboard = () => {
                             <div className="text-right">
                                 <p className="text-xs text-gray-500 font-bold uppercase">Rx Token Status</p>
                                 <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-black ${rxDetails.isFilled ? 'bg-gray-800 text-gray-500' :
-                                        rxDetails.isExpired ? 'bg-red-500/10 text-red-400' : 'bg- emerald-500/10 text-emerald-400 animate-pulse'
+                                    rxDetails.isExpired ? 'bg-red-500/10 text-red-400' : 'bg- emerald-500/10 text-emerald-400 animate-pulse'
                                     }`}>
                                     {rxDetails.isFilled ? 'ALREADY FILLED' : rxDetails.isExpired ? 'EXPIRED' : 'READY TO FILL'}
                                 </span>

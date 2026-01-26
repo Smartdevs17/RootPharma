@@ -167,7 +167,7 @@ const PharmacyDashboard = () => {
                             <div className="text-right">
                                 <p className="text-xs text-gray-500 font-bold uppercase">Rx Token Status</p>
                                 <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-black ${rxDetails.isFilled ? 'bg-gray-800 text-gray-500' :
-                                    rxDetails.isExpired ? 'bg-red-500/10 text-red-400' : 'bg- emerald-500/10 text-emerald-400 animate-pulse'
+                                    rxDetails.isExpired ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400 animate-pulse'
                                     }`}>
                                     {rxDetails.isFilled ? 'ALREADY FILLED' : rxDetails.isExpired ? 'EXPIRED' : 'READY TO FILL'}
                                 </span>
@@ -211,14 +211,14 @@ const PharmacyDashboard = () => {
                     </div>
 
                     <div className="space-y-6">
-                        <div className="bg-gradient-to-br from- emerald-600/20 to-blue-600/10 border border-emerald-500/20 rounded-2xl p-8">
+                        <div className="bg-gradient-to-br from-emerald-600/20 to-blue-600/10 border border-emerald-500/20 rounded-2xl p-8">
                             <h4 className="text-white font-bold mb-4 flex items-center gap-2">
                                 <CheckCircle2 size={18} className="text-emerald-400" /> Chain Verification Results
                             </h4>
                             <ul className="space-y-4">
                                 <li className="flex items-center gap-3 text-sm text-gray-300">
                                     <CheckCircle2 size={16} className="text-emerald-500" />
-                                    Patient ownership confirmed (NFT # {rxId} held by {rxDetails.patient.substring(0, 6)})
+                                    Patient ownership confirmed (NFT #{rxId} held by {rxDetails.patient.substring(0, 6)})
                                 </li>
                                 <li className="flex items-center gap-3 text-sm text-gray-300">
                                     <CheckCircle2 size={16} className="text-emerald-500" />
@@ -242,6 +242,48 @@ const PharmacyDashboard = () => {
                     </div>
                 </div>
             )}
+
+            <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden">
+                <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-[#1e293b]/30">
+                    <h3 className="text-lg font-bold text-white">Dispensary Inventory</h3>
+                    <div className="flex gap-2">
+                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">In Stock: 12</span>
+                        <span className="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 uppercase">Low Stock: 3</span>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="text-xs uppercase text-gray-500 font-bold border-b border-gray-800">
+                            <tr>
+                                <th className="px-6 py-4">Medication</th>
+                                <th className="px-6 py-4">Batch ID</th>
+                                <th className="px-6 py-4">Stock Level</th>
+                                <th className="px-6 py-4">Expiry</th>
+                                <th className="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-800">
+                            {[
+                                { name: "Amoxicillin 500mg", batch: "B-2023-X92", stock: 450, expiry: "12/20/2026", status: "Healthy" },
+                                { name: "Lisinopril 10mg", batch: "B-2023-Z44", stock: 120, expiry: "10/15/2025", status: "Low Stock" },
+                                { name: "Metformin 850mg", batch: "B-2024-A12", stock: 890, expiry: "05/12/2027", status: "Healthy" },
+                            ].map((item, i) => (
+                                <tr key={i} className="hover:bg-white/5 transition-colors">
+                                    <td className="px-6 py-4 font-medium text-white">{item.name}</td>
+                                    <td className="px-6 py-4 font-mono text-xs text-blue-400">{item.batch}</td>
+                                    <td className="px-6 py-4 text-gray-300">{item.stock} units</td>
+                                    <td className="px-6 py-4 text-gray-500">{item.expiry}</td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${item.status === 'Healthy' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                                            {item.status.toUpperCase()}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };

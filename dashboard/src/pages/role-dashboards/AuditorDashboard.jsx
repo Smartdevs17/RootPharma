@@ -176,6 +176,53 @@ const AuditorDashboard = () => {
                     </div>
                 </div>
             </div>
+
+            <div className="bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-gray-800 bg-[#1e293b]/20 flex justify-between items-center">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <Globe size={18} className="text-blue-400" /> Authorized Network Directory
+                    </h3>
+                    <div className="flex gap-2">
+                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">Manufacturers: 12</span>
+                        <span className="text-xs font-semibold px-2 py-1 bg-blue-500/10 text-blue-400 rounded border border-blue-500/20 uppercase">Pharmacies: 128</span>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="text-xs uppercase text-gray-500 font-bold border-b border-gray-800">
+                            <tr>
+                                <th className="px-6 py-4">Facility Name</th>
+                                <th className="px-6 py-4">License Type</th>
+                                <th className="px-6 py-4">Network ID</th>
+                                <th className="px-6 py-4">Status</th>
+                                <th className="px-6 py-4">Audit Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-800">
+                            {[
+                                { name: "Pfizer Global Hub", type: "MANUFACTURER", id: "0x82...f93e", status: "Active", rating: "9.8" },
+                                { name: "CVS Specialty Pharma", type: "PHARMACY", id: "0x33...1a2b", status: "Active", rating: "9.5" },
+                                { name: "Novartis Bio-Facility", type: "MANUFACTURER", id: "0x11...e45f", status: "Pending", rating: "N/A" },
+                            ].map((facility, i) => (
+                                <tr key={i} className="hover:bg-white/5 transition-colors">
+                                    <td className="px-6 py-4 font-medium text-white">{facility.name}</td>
+                                    <td className="px-6 py-4 text-[10px] font-bold text-gray-400 bg-gray-800/30 w-fit px-2 py-0.5 rounded uppercase">{facility.type}</td>
+                                    <td className="px-6 py-4 font-mono text-xs text-blue-400">{facility.id}</td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${facility.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
+                                            <span className="text-gray-300 text-xs">{facility.status}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="text-white font-black text-xs">{facility.rating}</span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };

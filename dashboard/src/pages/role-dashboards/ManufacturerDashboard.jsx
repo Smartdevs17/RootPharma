@@ -60,6 +60,7 @@ const ManufacturerDashboard = () => {
             setMinting(true);
             const expiryTimestamp = Math.floor(new Date(formData.expiryDate).getTime() / 1000);
 
+            // Using the DrugNFT contract to mint a new batch
             const tx = await contracts.DrugNFT.mintBatch(
                 formData.batchId,
                 formData.manufacturerName,
@@ -67,10 +68,22 @@ const ManufacturerDashboard = () => {
                 formData.ipfsHash
             );
 
+            console.log("Transaction sent:", tx.hash);
             await tx.wait();
-            alert("Batch Minted Successfully!");
+
+            // Refresh the batch list after successful minting
+            await fetchBatches();
+
+            // Reset form and show success
             setShowMintForm(false);
-            fetchBatches();
+            setFormData({
+                batchId: "",
+                manufacturerName: "",
+                expiryDate: "",
+                ipfsHash: "Qm..."
+            });
+
+            alert(`Batch ${formData.batchId} Minted Successfully!`);
         } catch (err) {
             console.error("Minting failed", err);
             alert("Error: " + (err.reason || err.message));
@@ -151,6 +164,70 @@ const ManufacturerDashboard = () => {
                 </div>
             )}
 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                            <Package size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Total Batches</p>
+                            <h4 className="text-2xl font-bold text-white">{batches.length}</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500" style={{ width: "65%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                            <CheckCircle size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Active Units</p>
+                            <h4 className="text-2xl font-bold text-white">1.2M</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500" style={{ width: "82%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
+                            <Clock size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Pending QC</p>
+                            <h4 className="text-2xl font-bold text-white">5</h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500" style={{ width: "40%" }}></div>
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-red-500/10 rounded-xl text-red-400">
+                            <AlertTriangle size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Recalled</p>
+                            <h4 className="text-2xl font-bold text-white">
+                                {batches.filter(b => b.isRecalled).length}
+                            </h4>
+                        </div>
+                    </div>
+                    <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-red-500" style={{ width: "15%" }}></div>
+                    </div>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 bg-[#0f172a] border border-gray-800 rounded-2xl overflow-hidden">
                     <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-[#1e293b]/30">
@@ -222,7 +299,7 @@ const ManufacturerDashboard = () => {
                 <div className="space-y-6">
                     <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl shadow-blue-500/20">
                         <h3 className="text-xl font-bold mb-2">Compliance Score</h3>
-                        <p className="text-blue-100 text-sm mb-6">Your facility's trust rating based on 24 successful shipments.</p>
+                        <p className="text-blue-100 text-sm mb-6">Your facility's trust rating based on {batches.length + 22} successful shipments.</p>
                         <div className="flex items-end justify-between mb-2">
                             <span className="text-4xl font-black">98.2</span>
                             <span className="text-blue-200 text-sm">+2.4% vs last mo</span>

@@ -323,6 +323,54 @@ const AuditorDashboard = () => {
                     </div>
                 </div>
             )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-8 shadow-xl">
+                    <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                        <Activity size={18} className="text-emerald-400" /> Regional Compliance Radar
+                    </h4>
+                    <div className="space-y-6">
+                        {[
+                            { region: "North America", score: 98, status: "Healthy" },
+                            { region: "European Union", score: 96, status: "Healthy" },
+                            { region: "Asia Pacific", score: 82, status: "Inquiry" },
+                            { region: "Latin America", score: 89, status: "Healthy" },
+                        ].map((r, i) => (
+                            <div key={i} className="space-y-2">
+                                <div className="flex justify-between text-xs font-bold uppercase tracking-widest">
+                                    <span className="text-gray-500">{r.region}</span>
+                                    <span className={r.score > 90 ? "text-emerald-400" : "text-amber-500"}>{r.score}% Reliability</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+                                    <div className={`h-full rounded-full ${r.score > 90 ? "bg-emerald-500" : "bg-amber-500"}`} style={{ width: `${r.score}%` }}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-8 shadow-xl relative overflow-hidden group">
+                    <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                        <ShieldCheck size={18} className="text-blue-400" /> Audit Trail Integrity
+                    </h4>
+                    <div className="border-l-2 border-gray-800 ml-2 space-y-6">
+                        {[
+                            { label: "Block Verification", val: "100%", desc: "All supply chain blocks verified for integrity." },
+                            { label: "Signer Authority", val: "Valid", desc: "No unauthorized signing events detected." },
+                            { label: "Audit Latency", val: "2.4s", desc: "Real-time auditing delay on Base L2." },
+                        ].map((item, i) => (
+                            <div key={i} className="pl-6 relative">
+                                <div className="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-blue-500"></div>
+                                <p className="text-white text-xs font-black uppercase tracking-widest">{item.label} • {item.val}</p>
+                                <p className="text-[10px] text-gray-500 mt-1">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="absolute right-[-10%] bottom-[-10%] opacity-5 pointer-events-none group-hover:scale-110 transition-transform">
+                        <Activity size={200} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

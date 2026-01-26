@@ -377,3 +377,26 @@ npm test
 
 ### PrescriptionVerifier
 - **Base Sepolia**: `0xcC9A77027D4E39f9861Be2573F569cE3b5325D51`
+## Digital Identity & Role-Based Access Control (RBAC)
+
+The RootPharma ecosystem uses a decentralized identity system governed by core registries.
+
+### Identity Flow
+
+1. **Registration**: 
+   - Entities (Manufacturers, Pharmacies, Doctors) submit their credentials to the contract owner.
+   - Upon verification of off-chain licenses, the `owner` calls the respective `registerEntity` function.
+   
+2. **Authorization**:
+   - `DrugNFT` minting is restricted to accounts verified in `ManufacturerRegistry.sol`.
+   - `PrescriptionNFT` issuance is restricted to accounts verified in `DoctorRegistry.sol`.
+   - Prescription filling is restricted to accounts verified in `PharmacyRegistry.sol`.
+
+3. **Status Verification**:
+   - High-level logic contracts like `RegulatoryCompliance.sol` query these registries in real-time before authorizing on-chain state changes.
+
+### Security Model
+
+- **Contract Ownership**: Most registries are `Ownable`, allowing for administrative control over the participant list.
+- **Circuit Breakers**: The `AuditorDashboard` (Regulatory Service) can trigger emergency freezes on specific facility IDs if compromise is detected.
+- **Audit Logging**: All registration and revocation events are irreversibly logged to the `AuditTrail.sol` for future regulatory review.

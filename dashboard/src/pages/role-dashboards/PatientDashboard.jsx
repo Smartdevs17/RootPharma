@@ -78,7 +78,7 @@ const PatientDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-blue-500/50 transition-all cursor-pointer group/stat">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
                             <ShieldCheck size={24} />
@@ -93,7 +93,7 @@ const PatientDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-emerald-500/50 transition-all cursor-pointer group/stat">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
                             <Calendar size={24} />
@@ -108,7 +108,7 @@ const PatientDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-purple-500/50 transition-all cursor-pointer group/stat">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400">
                             <History size={24} />
@@ -123,7 +123,7 @@ const PatientDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-rose-500/50 transition-all cursor-pointer group/stat">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-rose-500/10 rounded-xl text-rose-400">
                             <Pill size={24} />

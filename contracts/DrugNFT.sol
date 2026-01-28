@@ -13,27 +13,34 @@ contract DrugNFT {
     /// @notice Contract owner address (typically the manufacturer)
     address private _owner;
 
-    /// @notice Counter for generating unique token IDs
+    /// @dev Internal tracker for assigning unique token IDs
     uint256 private _tokenIdCounter;
 
-    /// @notice Structure to store drug batch information
-    /// @dev Contains all metadata for a pharmaceutical batch
+    /**
+     * @notice Container for pharmaceutical batch information
+     * @dev Contains all metadata for a pharmaceutical batch
+     * @param batchId Unique identifier (e.g., "BATCH-2025-PFZ-001")
+     * @param manufacturer Pharmaceutical company name
+     * @param expiryDate UNIX timestamp of expiration
+     * @param ipfsHash Document reference for certificates/lab results
+     * @param isRecalled Flag indicating if batch has been flagged as unsafe
+     */
     struct Batch {
-        string batchId;        // Unique batch identifier (e.g., "BATCH-2025-PFZ-001")
-        string manufacturer;   // Pharmaceutical company name
-        uint256 expiryDate;   // Unix timestamp of expiry date
-        string ipfsHash;      // IPFS hash for additional documents/certificates
-        bool isRecalled;      // Flag indicating if batch has been recalled
+        string batchId;
+        string manufacturer;
+        uint256 expiryDate;
+        string ipfsHash;
+        bool isRecalled;
     }
 
     // ============================================
     // MAPPINGS
     // ============================================
 
-    /// @notice Maps token ID to owner address
+    /// @notice Maps token ID to current owner address
     mapping(uint256 => address) private _owners;
 
-    /// @notice Maps token ID to batch information
+    /// @notice Access point for full batch metadata by ID
     mapping(uint256 => Batch) public batches;
 
     // ============================================
@@ -103,14 +110,16 @@ contract DrugNFT {
         return _owner;
     }
 
-    /// @notice Retrieves complete batch information for a given token
-    /// @dev Reverts if token doesn't exist
-    /// @param tokenId The token ID to query
-    /// @return batchId The batch identifier
-    /// @return manufacturer The manufacturer name
-    /// @return expiryDate The expiry timestamp
-    /// @return ipfsHash The IPFS hash for documents
-    /// @return isRecalled Whether the batch is recalled
+    /**
+     * @notice Retrieves complete batch information for a given token
+     * @dev Reverts if token doesn't exist
+     * @param tokenId The unique identifier of the drug batch
+     * @return batchId The unique batch string (e.g., BATCH-001)
+     * @return manufacturer Legal name of the producer
+     * @return expiryDate UNIX timestamp of expiration
+     * @return ipfsHash Link to certification documents
+     * @return isRecalled Current safety status
+     */
     function getBatchDetails(uint256 tokenId) public view returns (
         string memory batchId,
         string memory manufacturer,
@@ -144,13 +153,15 @@ contract DrugNFT {
     // EXTERNAL FUNCTIONS (OWNER ONLY)
     // ============================================
 
-    /// @notice Mints a new drug batch NFT
-    /// @dev Only callable by contract owner. Increments token counter.
-    /// @param _batchId Unique identifier for the batch
-    /// @param _manufacturer Name of pharmaceutical company
-    /// @param _expiryDate Unix timestamp when drug expires
-    /// @param _ipfsHash Optional IPFS hash for certificates
-    /// @return newTokenId The ID of newly minted token
+    /**
+     * @notice Records a new pharmaceutical batch on-chain
+     * @dev Mints an NFT to the manufacturer (owner). Increments internal counter.
+     * @param _batchId Unique batch reference
+     * @param _manufacturer Name of the producing entity
+     * @param _expiryDate UNIX timestamp of product expiration
+     * @param _ipfsHash Reference to lab reports and certifications
+     * @return newTokenId The ID assigned to the new batch NFT
+     */
     function mintBatch(
         string memory _batchId,
         string memory _manufacturer,

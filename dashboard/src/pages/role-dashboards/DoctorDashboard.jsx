@@ -196,7 +196,7 @@ const DoctorDashboard = () => {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400">
                             <FilePlus size={24} />
@@ -211,7 +211,7 @@ const DoctorDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
                             <CheckCircle size={24} />
@@ -226,7 +226,7 @@ const DoctorDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
                             <User size={24} />
@@ -241,7 +241,7 @@ const DoctorDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-amber-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
                             <Clock size={24} />

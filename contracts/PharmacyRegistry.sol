@@ -10,6 +10,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  */
 contract PharmacyRegistry is Ownable {
     
+    /**
+     * @notice Data structure for a registered pharmacy
+     * @param name Trading name of the pharmacy
+     * @param licenseNumber Government-issued medical license identifier
+     * @param location physical address or coordinates
+     * @param walletAddress The blockchain address for signing and dispensing
+     * @param isVerified True if explicitly audited by the regulator (owner)
+     * @param isActive True if the pharmacy is currently operational
+     * @param registrationDate UNIX timestamp of registration
+     * @param lastUpdateDate UNIX timestamp of most recent profile edit
+     * @param contactEmail Official correspondence email
+     * @param phoneNumber Official contact number
+     */
     struct Pharmacy {
         string name;
         string licenseNumber;
@@ -24,15 +37,17 @@ contract PharmacyRegistry is Ownable {
     }
     
     // Mapping from pharmacy ID to Pharmacy struct
+    /// @notice Maps unique pharmacy ID to its full profile
     mapping(uint256 => Pharmacy) public pharmacies;
     
-    // Mapping from wallet address to pharmacy ID
+    /// @notice Quick lookup to find a pharmacy ID by decentralized identity (wallet address)
     mapping(address => uint256) public addressToPharmacyId;
     
-    // Counter for pharmacy IDs
+    /// @dev Internal tracker for assigning sequential pharmacy IDs
     uint256 private _pharmacyIdCounter;
     
     // Events
+    /// @notice Emitted when a new pharmacy is onboarded
     event PharmacyRegistered(
         uint256 indexed pharmacyId,
         string name,
@@ -40,9 +55,16 @@ contract PharmacyRegistry is Ownable {
         uint256 registrationDate
     );
     
+    /// @notice Emitted when a pharmacy's audit status is upgraded to verified
     event PharmacyVerified(uint256 indexed pharmacyId, address indexed verifier);
+    
+    /// @notice Emitted when a pharmacy is suspended from the network
     event PharmacyDeactivated(uint256 indexed pharmacyId, address indexed deactivator);
+    
+    /// @notice Emitted when a suspended pharmacy is restored
     event PharmacyReactivated(uint256 indexed pharmacyId, address indexed reactivator);
+    
+    /// @notice Emitted when a pharmacy modifies its contact or location details
     event PharmacyUpdated(uint256 indexed pharmacyId, address indexed updater);
     
     /**

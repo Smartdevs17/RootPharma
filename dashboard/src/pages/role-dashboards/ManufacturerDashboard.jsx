@@ -17,6 +17,10 @@ const ManufacturerDashboard = () => {
         ipfsHash: "Qm..." // Placeholder
     });
 
+    /**
+     * @dev Fetches production batches for the manufacturer from the DrugNFT contract.
+     * If contract interaction fails, falls back to mock data for demonstration.
+     */
     const fetchBatches = async () => {
         if (!contracts.DrugNFT) return;
         try {
@@ -52,6 +56,11 @@ const ManufacturerDashboard = () => {
         fetchBatches();
     }, [contracts]);
 
+    /**
+     * @dev Handles the minting of a new pharmaceutical batch.
+     * Interacts with the DrugNFT contract to create a new token representing the batch.
+     * @param {Event} e - Form submission event.
+     */
     const handleMint = async (e) => {
         e.preventDefault();
         if (!contracts.DrugNFT) return;

@@ -28,6 +28,10 @@ const PharmacyDashboard = () => {
         item.batch.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    /**
+     * @dev Looks up prescription details from the smart contract using a token ID.
+     * @param {Event} e - Submit event.
+     */
     const lookupPrescription = async (e) => {
         e.preventDefault();
         if (!rxId || !contracts.PrescriptionNFT) return;
@@ -60,6 +64,10 @@ const PharmacyDashboard = () => {
         }
     };
 
+    /**
+     * @dev Marks a prescription as filled in the smart contract.
+     * Requires the prescription to be active and not expired.
+     */
     const fillPrescription = async () => {
         if (!rxId || !contracts.PrescriptionNFT) return;
 
@@ -77,6 +85,11 @@ const PharmacyDashboard = () => {
         }
     };
 
+    /**
+     * @dev Handles receiving and verifying a batch of medication.
+     * In a production environment, this would verify the batch against a QC registry.
+     * @param {Event} e - Submit event.
+     */
     const handleReceive = async (e) => {
         e.preventDefault();
         try {

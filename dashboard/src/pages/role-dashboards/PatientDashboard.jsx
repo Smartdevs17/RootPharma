@@ -12,6 +12,10 @@ const PatientDashboard = () => {
     const [batchId, setBatchId] = useState("");
     const [verificationResult, setVerificationResult] = useState(null);
 
+    /**
+     * Fetches the patient's reward token balance and prescription data.
+     * Connects to the RewardToken contract if available and updates the component state.
+     */
     const fetchData = async () => {
         if (!contracts.RewardToken || !account) return;
 
@@ -33,6 +37,11 @@ const PatientDashboard = () => {
         }
     };
 
+    /**
+     * Verifies the authenticity of a medication package using its batch ID.
+     * Simulates on-chain verification and updates the result state.
+     * @param {Event} e - The form submission event.
+     */
     const verifyMedication = async (e) => {
         e.preventDefault();
         if (!batchId) return;

@@ -120,7 +120,7 @@ const PharmacyDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
                             <CheckCircle2 size={24} />
@@ -135,7 +135,7 @@ const PharmacyDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
                             <Pill size={24} />
@@ -150,7 +150,7 @@ const PharmacyDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-amber-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
                             <ShieldCheck size={24} />
@@ -165,7 +165,7 @@ const PharmacyDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl">
+                <div className="bg-[#0f172a] border border-gray-800 p-6 rounded-2xl hover:border-red-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/5 cursor-default group">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-red-500/10 rounded-xl text-red-400">
                             <XCircle size={24} />

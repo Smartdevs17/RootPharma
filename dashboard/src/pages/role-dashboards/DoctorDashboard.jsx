@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Stethoscope, FilePlus, User, Pill, Calendar, Loader2, Search } from "lucide-react";
+import { Stethoscope, FilePlus, User, Pill, Calendar, Loader2, Search, Clock } from "lucide-react";
 import { useWeb3 } from "../../context/Web3Context";
 
 const DoctorDashboard = () => {
@@ -20,6 +20,10 @@ const DoctorDashboard = () => {
         notes: ""
     });
 
+    /**
+     * @dev Fetches internal prescription logs for the doctor.
+     * In a real system, this would query a subgraph or the blockchain for indexed events.
+     */
     const fetchPrescriptions = async () => {
         // Mocking for now as we don't have a direct "getDoctorPrescriptions" in the ABI I added
         // In production, we'd use indexed events
@@ -34,6 +38,11 @@ const DoctorDashboard = () => {
         fetchPrescriptions();
     }, []);
 
+    /**
+     * @dev Orchestrates the on-chain issuance of a new Prescription NFT.
+     * Requires the caller to be a verified doctor on the registry.
+     * @param {Event} e - Form submission event.
+     */
     const handleIssue = async (e) => {
         e.preventDefault();
         if (!contracts.PrescriptionNFT) return;

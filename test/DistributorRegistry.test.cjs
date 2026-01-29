@@ -54,4 +54,38 @@ describe("DistributorRegistry", function () {
       expect(await registry.isVerifiedDistributor(distributor.address)).to.be.true;
     });
   });
+
+  describe("Delivery & Status", function () {
+    it("Should record a delivery by distributor", async function () {
+      const { registry, distributor } = await loadFixture(deployFixture);
+      await registry.registerDistributor("Logistics", "1", "EU", distributor.address);
+      
+      await expect(registry.connect(distributor).recordDelivery(1))
+        .to.emit(registry, "DeliveryRecorded")
+        .withArgs(1);
+        
+      const d = await registry.getDistributor(1);
+      expect(d.totalDeliveries).to.equal(1);
+    });
+
+    it("Should fail if unauthorized account records delivery", async function () {
+      const { registry, otherAccount, distributor } = await loadFixture(deployFixture);
+      await registry.registerDistributor("Logistics", "1", "EU", distributor.address);
+      
+      await expect(registry.connect(otherAccount).recordDelivery(1))
+        .to.be.revertedWith("Unauthorized");
+    });
+
+    it("Should deactivate a distributor", async function () {
+      const { registry, owner, distributor } = await loadFixture(deployFixture);
+      await registry.registerDistributor("Logistics", "1", "EU", distributor.address);
+      await registry.verifyDistributor(1);
+      
+      await expect(registry.deactivateDistributor(1))
+        .to.emit(registry, "DistributorDeactivated")
+        .withArgs(1);
+        
+      expect(await registry.isVerifiedDistributor(distributor.address)).to.be.false;
+    });
+  });
 });

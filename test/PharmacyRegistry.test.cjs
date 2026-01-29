@@ -1,6 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 describe("PharmacyRegistry", function () {
   async function deployFixture() {
@@ -56,4 +57,46 @@ describe("PharmacyRegistry", function () {
       expect(await registry.isVerifiedPharmacy(pharmacy.address)).to.be.true;
     });
   });
-});function anyValue(arg) { return true; } // Placeholder if not imported correctly
+
+  describe("Status Management", function () {
+    it("Should deactivate and reactivate a pharmacy", async function () {
+      const { registry, owner, pharmacy } = await loadFixture(deployFixture);
+      await registry.registerPharmacy("City", "1", "L", pharmacy.address, "e", "p");
+      
+      await expect(registry.deactivatePharmacy(1))
+        .to.emit(registry, "PharmacyDeactivated")
+        .withArgs(1, owner.address);
+        
+      expect(await registry.isVerifiedPharmacy(pharmacy.address)).to.be.false;
+      
+      await expect(registry.reactivatePharmacy(1))
+        .to.emit(registry, "PharmacyReactivated")
+        .withArgs(1, owner.address);
+        
+      // Still false because it needs verification again? Wait, isVerified and isActive are separate.
+      // let's check the code: return pharmacy.isVerified && pharmacy.isActive;
+      // After reactivation, isActive is true. But did we verify it before?
+      // In this test, we didn't verify. So it should still be false.
+    });
+  });
+
+  describe("Profile Updates", function () {
+    it("Should update pharmacy info", async function () {
+      const { registry, owner, pharmacy } = await loadFixture(deployFixture);
+      await registry.registerPharmacy("City", "1", "L", pharmacy.address, "e", "p");
+      
+      const newLoc = "Uptown";
+      const newEmail = "new@pharm.com";
+      const newPhone = "000-0000";
+      
+      await expect(registry.updatePharmacyInfo(1, newLoc, newEmail, newPhone))
+        .to.emit(registry, "PharmacyUpdated")
+        .withArgs(1, owner.address);
+        
+      const p = await registry.getPharmacy(1);
+      expect(p.location).to.equal(newLoc);
+      expect(p.contactEmail).to.equal(newEmail);
+      expect(p.phoneNumber).to.equal(newPhone);
+    });
+  });
+});

@@ -48,4 +48,61 @@ describe("DrugNFT", function () {
       )).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
+
+  describe("Validation", function () {
+    const batchId = "BATCH-VALIDATE";
+    const manufacturer = "RootPharma Corp";
+
+    it("Should be valid if not recalled and not expired", async function () {
+      const { drugNFT } = await loadFixture(deployFixture);
+      const expiryDate = (await time.latest()) + 3600;
+      await drugNFT.mintBatch(batchId, manufacturer, expiryDate, "hash");
+
+      expect(await drugNFT.isValid(1)).to.be.true;
+    });
+
+    it("Should be invalid if recalled", async function () {
+      const { drugNFT } = await loadFixture(deployFixture);
+      const expiryDate = (await time.latest()) + 3600;
+      await drugNFT.mintBatch(batchId, manufacturer, expiryDate, "hash");
+      await drugNFT.recallBatch(1);
+
+      expect(await drugNFT.isValid(1)).to.be.false;
+    });
+
+    it("Should be invalid if expired", async function () {
+      const { drugNFT } = await loadFixture(deployFixture);
+      const expiryDate = (await time.latest()) + 3600;
+      await drugNFT.mintBatch(batchId, manufacturer, expiryDate, "hash");
+
+      // Advance time beyond expiry
+      await time.increase(7200);
+
+      expect(await drugNFT.isValid(1)).to.be.false;
+    });
+  });
+
+  describe("Recalling", function () {
+    it("Should allow owner to recall a batch", async function () {
+      const { drugNFT } = await loadFixture(deployFixture);
+      const expiryDate = (await time.latest()) + 3600;
+      await drugNFT.mintBatch("B-003", "PharmCo", expiryDate, "hash");
+
+      await expect(drugNFT.recallBatch(1))
+        .to.emit(drugNFT, "BatchRecalled")
+        .withArgs(1);
+
+      const details = await drugNFT.getBatchDetails(1);
+      expect(details.isRecalled).to.be.true;
+    });
+
+    it("Should fail if non-owner tries to recall", async function () {
+      const { drugNFT, otherAccount } = await loadFixture(deployFixture);
+      const expiryDate = (await time.latest()) + 3600;
+      await drugNFT.mintBatch("B-004", "PharmCo", expiryDate, "hash");
+
+      await expect(drugNFT.connect(otherAccount).recallBatch(1))
+        .to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
 });
